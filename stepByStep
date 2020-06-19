@@ -58,3 +58,7 @@ Decks(titles and cards)
 
 => Notes:
 I need middleware if I am using redux
+
+=>Common problems
+when handleInitialData doesn't work you need to check that you have put a conditon
+like {decks && Object.values()} and  if(!deck){return < no deck >}

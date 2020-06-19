@@ -1,7 +1,10 @@
 import React from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { handleInitialData } from '../actions/index'
+
+// import { decks } from '../utils/data'
+import { blue, gray, white } from '../utils/colors'
 
 
 
@@ -12,21 +15,45 @@ class DeckList extends React.Component {
     }
     render() {
         const { decks } = this.props
-        console.log(decks)
+        if (!decks) {
+            return <Text>No decks yet</Text>
+        }
         return (
             <View>
-                {Object.values(decks).map(deck => {
-                    return (
-                        <View>
-                            <Text>{deck.title}</Text>
-                        </View>
-                    );
-                })}
+
+                {decks &&
+                    Object.values(decks).map(deck => {
+                        return (
+                            <TouchableOpacity
+                                key={deck.title}
+                                style={styles.item}
+                            >
+                                <Text style={styles.itemText}>{deck.title}</Text>
+                                <Text style={[styles.itemText, { color: gray, fontSize: 16 }]}>{deck.questions.length} Cards</Text>
+                            </TouchableOpacity>
+                        );
+                    })}
             </View>
         )
 
     }
 }
+
+const styles = StyleSheet.create({
+    item: {
+        backgroundColor: blue,
+        padding: 20,
+        paddingLeft: 60,
+        paddingRight: 60,
+        marginBottom: 20,
+    },
+    itemText: {
+        color: white,
+        textAlign: 'center',
+        fontSize: 22,
+
+    }
+})
 
 function mapStateToProps(state) {
     return {

@@ -1,19 +1,24 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
+import { createStore } from 'redux'
+import { Provider, connect } from 'react-redux'
+import reducer from './app/reducers'
 
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
+import DeckList from './app/components/DeckList'
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome to React Native!</Text>
-      <Text style={styles.instructions}>To get started, edit App.js</Text>
-      <Text style={styles.instructions}>{instructions}</Text>
-    </View>
-  );
+
+class App extends Component {
+
+  render() {
+    return (
+      <Provider store={createStore(reducer)}>
+        <View style={styles.container}>
+          <DeckList />
+        </View>
+      </Provider>
+
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -34,3 +39,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+export default (App)

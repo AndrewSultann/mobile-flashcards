@@ -55,3 +55,6 @@ Decks(titles and cards)
 => Database
 * Use AsyncStorage :import AsyncStorage from '@react-native-community/async-storage';
 - We will have 4 methods: getDecks(return all), getDeck(take Id), saveDeckTitle(take Title & add it to list), addCardToDeck(take title & card)
+
+=> Notes:
+I need middleware if I am using redux

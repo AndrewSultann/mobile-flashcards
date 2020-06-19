@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
 import reducer from './app/reducers'
+import middleware from './app/middleware'
 
 import DeckList from './app/components/DeckList'
 
@@ -10,8 +11,9 @@ import DeckList from './app/components/DeckList'
 class App extends Component {
 
   render() {
+    const store = createStore(reducer, middleware)
     return (
-      <Provider store={createStore(reducer)}>
+      <Provider store={store}>
         <View style={styles.container}>
           <DeckList />
         </View>

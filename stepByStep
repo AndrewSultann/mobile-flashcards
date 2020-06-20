@@ -62,3 +62,34 @@ I need middleware if I am using redux
 =>Common problems
 when handleInitialData doesn't work you need to check that you have put a conditon
 like {decks && Object.values()} and  if(!deck){return < no deck >}
+
+
+
+
+
+=> Filter for Objects:
+Object.filter = (obj, predicate) => 
+    Object.keys(obj)
+          .filter( key => predicate(obj[key]) )
+          .reduce( (res, key) => (res[key] = obj[key], res), {} );
+
+OR**
+case DELETE_DECK :
+// brilliant
+const title = action.title
+const { [title]: value, ...rest } = state
+return rest 
+
+
+=> Navigation
+To Pass something to a component: https://stackoverflow.com/questions/45109872/passing-data-using-react-native-navigation
+
+from the parent:
+onPress={() => this.props.navigation.navigate('Child', {title: deck.title})}
+
+to the child:
+function child( {route})
+
+const {title} = route.params
+
+IF its a class => title: this.props.route.params.user.name,

@@ -1,4 +1,4 @@
-import { RECEIVE_DECKS, ADD_DECK } from '../actions/index'
+import { RECEIVE_DECKS, ADD_DECK, DELETE_DECK, ADD_CARD } from '../actions/index'
 
 function decks(state = {}, action) {
     switch (action.type) {
@@ -12,6 +12,24 @@ function decks(state = {}, action) {
             return {
                 ...state,
                 ...action.title
+            }
+
+        case DELETE_DECK:
+            // brilliant
+            const { [action.title]: value, ...rest } = state
+            return rest
+
+        case ADD_CARD:
+            const { card, title } = action
+            return {
+                ...state,
+                [title]: {
+                    ...state[title],
+                    questions: [
+                        ...state[title].questions,
+                        card
+                    ]
+                }
             }
     }
 }

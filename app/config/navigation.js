@@ -12,6 +12,7 @@ import AddDeck from '../components/AddDeck'
 import AddCard from '../components/AddCard'
 import DeckView from '../components/DeckView'
 import Quiz from '../components/Quiz'
+import { color } from 'react-native-reanimated'
 
 
 
@@ -40,6 +41,7 @@ const AppTabsScreen = () => (
             name='DeckList'
             component={DeckList}
             options={{
+                tabBarLabel: 'Deck List',
                 tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
             }}
         />
@@ -47,6 +49,7 @@ const AppTabsScreen = () => (
             name='AddDeck'
             component={AddDeck}
             options={{
+                tabBarLabel: 'Add Deck',
                 tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
             }}
         />
@@ -58,6 +61,7 @@ const AppStacks = createStackNavigator()
 
 const AppStackScreen = () => (
     <AppStacks.Navigator
+        headerMode='none'
         // to set options for all your screens
         screenOptions={{
             headerTintColor: white,
@@ -69,6 +73,7 @@ const AppStackScreen = () => (
             component={AppTabsScreen}
             // Options for my screen
             options={{
+                headerTitleAlign: "center",
                 headerTitle: 'Home'
             }}
         />
@@ -78,7 +83,7 @@ const AppStackScreen = () => (
             // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Deck Details`,
-                headerTitleAlign: white,
+                headerTitleAlign: "center",
                 // I can overwrite the headerStyle set in Navigator
                 headerStyle: { backgroundColor: blue }
             })}
@@ -89,7 +94,7 @@ const AppStackScreen = () => (
             // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Add Card`,
-                headerTitleAlign: white,
+                headerTitleAlign: "center",
                 // I can overwrite the headerStyle set in Navigator
                 headerStyle: { backgroundColor: blue }
             })}
@@ -100,7 +105,7 @@ const AppStackScreen = () => (
             // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Quiz`,
-                headerTitleAlign: white,
+                headerTitleAlign: "center",
                 // I can overwrite the headerStyle set in Navigator
                 headerStyle: { backgroundColor: blue }
             })}

@@ -16,7 +16,8 @@ class AddCard extends React.Component {
     handleAnswerChange = (answer) => {
         this.setState({ answer })
     }
-    handleSubmit = () => {
+    handleSubmit = (e) => {
+        e.preventDefault()
         const { dispatch } = this.props
         const { title } = this.props.route.params
         const card = {
@@ -26,11 +27,14 @@ class AddCard extends React.Component {
         dispatch(addCard(title, card))
         this.props.navigation.navigate('DeckList')
     }
+    isDisabled = () => {
+        return this.state.question === '' || this.state.answer === ''
+    }
     render() {
         const { question, answer } = this.state
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Do you want to add a new card?</Text>
+                <Text style={styles.title}>Add a card to deck "{this.props.route.params.title}" </Text>
                 <TextInput
                     style={styles.TextInput}
                     value={question}
@@ -48,7 +52,8 @@ class AddCard extends React.Component {
                 />
                 <TouchableOpacity
                     style={styles.submitBtn}
-                    onPress={() => this.handleSubmit()}
+                    onPress={(e) => this.handleSubmit(e)}
+                    disabled={this.isDisabled()}
                 >
                     <Text style={styles.submitBtnText}>
                         Submit
@@ -69,6 +74,8 @@ const styles = StyleSheet.create({
         fontSize: 27,
         color: blue,
         marginBottom: 40,
+        marginTop: 20,
+        fontWeight: 'bold'
     },
     TextInput: {
         width: 300,

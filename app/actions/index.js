@@ -19,10 +19,10 @@ export function addDeck(title) {
     }
 }
 
-export function deleteDeck(title) {
+export function deleteDeck(titleId) {
     return {
         type: DELETE_DECK,
-        title
+        titleId
     }
 }
 

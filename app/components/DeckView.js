@@ -8,6 +8,7 @@ import { deleteDeck } from '../actions'
 class DeckView extends React.Component {
     deleteDeckFunc = (title) => {
         const { dispatch } = this.props
+        console.log('title', title)
         dispatch(deleteDeck(title))
         this.props.navigation.navigate('DeckList')
     }
@@ -31,8 +32,9 @@ class DeckView extends React.Component {
                         <Text style={styles.itemText}>Start a Quiz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={{ margin: 100 }}
-                        onPress={(title) => this.deleteDeckFunc(title)}
+                        style={{ marginTop: 100 }}
+                        // FOCUS
+                        onPress={() => this.deleteDeckFunc(title)}
                     >
                         <Text style={[{ color: red, textAlign: "center" }]}>Delete Deck</Text>
                     </TouchableOpacity>

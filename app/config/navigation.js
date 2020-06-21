@@ -5,16 +5,30 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
-import { blue, white } from '../utils/colors'
+import { blue, white, gray } from '../utils/colors'
 
 import DeckList from '../components/DeckList'
 import AddDeck from '../components/AddDeck'
 import AddCard from '../components/AddCard'
 import DeckView from '../components/DeckView'
 import Quiz from '../components/Quiz'
-import { color } from 'react-native-reanimated'
 
+// function getHeaderTitle(route) {
+//     // Access the tab navigator's state using `route.state`
+//     const routeName = route.state
+//         ? // Get the currently active route name in the tab navigator
+//         route.state.routes[route.state.index].name
+//         : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
+//         // In our case, it's "Feed" as that's the first screen inside the navigator
+//         route.params?.screen || 'DeckList';
 
+//     switch (routeName) {
+//         case 'DeckList':
+//             return 'Home';
+//         case 'AddDeck':
+//             return 'Add Deck';
+//     }
+// }
 
 
 const AppTabs = createBottomTabNavigator();
@@ -23,7 +37,10 @@ const AppTabsScreen = () => (
     <AppTabs.Navigator
         initialRouteName='AppTabsScreen'
         tabBarOptions={{
+            // styles for the text
             activeTintColor: Platform.OS === 'ios' ? blue : white,
+            inactiveTintColor: Platform.OS === 'ios' ? blue : gray,
+            // styles for the bar itself
             style: {
                 height: 56,
                 backgroundColor: Platform.OS === 'ios' ? white : blue,
@@ -40,10 +57,15 @@ const AppTabsScreen = () => (
         <AppTabs.Screen
             name='DeckList'
             component={DeckList}
+            tabBarOptions={{
+                activeTintColor: 'tomato',
+                inactiveTintColor: 'gray',
+            }}
             options={{
                 tabBarLabel: 'Deck List',
                 tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
             }}
+
         />
         <AppTabs.Screen
             name='AddDeck'
@@ -61,7 +83,7 @@ const AppStacks = createStackNavigator()
 
 const AppStackScreen = () => (
     <AppStacks.Navigator
-        headerMode='none'
+        // headerMode='none'
         // to set options for all your screens
         screenOptions={{
             headerTintColor: white,
@@ -72,10 +94,10 @@ const AppStackScreen = () => (
             name='AppTabsScreen'
             component={AppTabsScreen}
             // Options for my screen
-            options={{
-                headerTitleAlign: "center",
-                headerTitle: 'Home'
-            }}
+            options={() => ({
+                headerShown: false,
+                headerTitleAlign: 'center'
+            })}
         />
         <AppStacks.Screen
             name='DeckView'
@@ -91,22 +113,18 @@ const AppStackScreen = () => (
         <AppStacks.Screen
             name='AddCard'
             component={AddCard}
-            // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Add Card`,
                 headerTitleAlign: "center",
-                // I can overwrite the headerStyle set in Navigator
                 headerStyle: { backgroundColor: blue }
             })}
         />
         <AppStacks.Screen
             name='Quiz'
             component={Quiz}
-            // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Quiz`,
                 headerTitleAlign: "center",
-                // I can overwrite the headerStyle set in Navigator
                 headerStyle: { backgroundColor: blue }
             })}
         />

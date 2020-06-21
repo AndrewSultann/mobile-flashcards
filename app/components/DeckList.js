@@ -24,7 +24,7 @@ class DeckList extends React.Component {
                 {decks &&
                     Object.values(decks).map(deck => {
                         return (
-                            <Deck deck={deck} navigation={this.props.navigation} />
+                            <Deck key={deck.title} deck={deck} navigation={this.props.navigation} />
                         );
                     })}
             </View>

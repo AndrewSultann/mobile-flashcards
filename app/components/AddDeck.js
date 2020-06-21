@@ -21,6 +21,9 @@ class AddDeck extends React.Component {
         this.props.navigation.navigate('DeckList')
 
     }
+    isDisabled = () => {
+        return this.state.title === ''
+    }
     render() {
         const { title } = this.state
         return (
@@ -35,6 +38,7 @@ class AddDeck extends React.Component {
                 <TouchableOpacity
                     style={styles.submitBtn}
                     onPress={this.handleSubmit}
+                    disabled={this.isDisabled()}
                 >
                     <Text style={styles.submitBtnText}>
                         Submit
@@ -54,6 +58,8 @@ const styles = StyleSheet.create({
         fontSize: 27,
         color: blue,
         marginBottom: 40,
+        marginTop: 20,
+        fontWeight: 'bold'
     },
     TextInput: {
         width: 300,

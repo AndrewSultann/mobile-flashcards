@@ -9,15 +9,29 @@ function decks(state = {}, action) {
             }
 
         case ADD_DECK:
+            // I also need to add the questions object
             return {
                 ...state,
-                ...action.title
+                [action.title]: {
+                    title: action.title,
+                    questions: []
+                }
+
             }
 
         case DELETE_DECK:
             // brilliant
-            const { [action.title]: value, ...rest } = state
-            return rest
+            const { titleId } = action;
+            const { [titleId]: value, ...restDeck } = state;
+            return restDeck;
+
+        // doesn't work :(
+        // const obj = state
+        // const predicate = action.titleId
+        // return Object.filter = (obj, predicate) =>
+        //     Object.keys(obj)
+        //         .filter(key => predicate(obj[key]))
+        //         .reduce((res, key) => (res[key] = obj[key], res), {})
 
         case ADD_CARD:
             const { card, title } = action

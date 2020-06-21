@@ -60,13 +60,13 @@ Decks(titles and cards)
 I need middleware if I am using redux
 
 =>Common problems
-when handleInitialData doesn't work you need to check that you have put a conditon
+1)when handleInitialData doesn't work you need to check that you have put a conditon
 like {decks && Object.values()} and  if(!deck){return < no deck >}
 
 
+2) onPress={() => this.deleteDeckFunc(title)}
 
-
-
+--
 => Filter for Objects:
 Object.filter = (obj, predicate) => 
     Object.keys(obj)
@@ -93,3 +93,7 @@ function child( {route})
 const {title} = route.params
 
 IF its a class => title: this.props.route.params.user.name,
+
+
+- A Library for navigation
+https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/

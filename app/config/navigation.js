@@ -13,22 +13,7 @@ import AddCard from '../components/AddCard'
 import DeckView from '../components/DeckView'
 import Quiz from '../components/Quiz'
 
-// function getHeaderTitle(route) {
-//     // Access the tab navigator's state using `route.state`
-//     const routeName = route.state
-//         ? // Get the currently active route name in the tab navigator
-//         route.state.routes[route.state.index].name
-//         : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
-//         // In our case, it's "Feed" as that's the first screen inside the navigator
-//         route.params?.screen || 'DeckList';
 
-//     switch (routeName) {
-//         case 'DeckList':
-//             return 'Home';
-//         case 'AddDeck':
-//             return 'Add Deck';
-//     }
-// }
 
 
 const AppTabs = createBottomTabNavigator();
@@ -57,13 +42,9 @@ const AppTabsScreen = () => (
         <AppTabs.Screen
             name='DeckList'
             component={DeckList}
-            tabBarOptions={{
-                activeTintColor: 'tomato',
-                inactiveTintColor: 'gray',
-            }}
             options={{
                 tabBarLabel: 'Deck List',
-                tabBarIcon: ({ tintColor }) => <Ionicons name='ios-bookmarks' size={30} color={tintColor} />
+                tabBarIcon: ({ color }) => <Ionicons name='ios-bookmarks' size={30} color={color} />
             }}
 
         />
@@ -72,7 +53,7 @@ const AppTabsScreen = () => (
             component={AddDeck}
             options={{
                 tabBarLabel: 'Add Deck',
-                tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
+                tabBarIcon: ({ color }) => <FontAwesome name='plus-square' size={30} color={color} />
             }}
         />
 
@@ -87,7 +68,8 @@ const AppStackScreen = () => (
         // to set options for all your screens
         screenOptions={{
             headerTintColor: white,
-            headerStyle: { backgroundColor: blue }
+            headerStyle: { backgroundColor: blue },
+            headerTitleAlign: 'center'
         }}
     >
         <AppStacks.Screen
@@ -96,7 +78,6 @@ const AppStackScreen = () => (
             // Options for my screen
             options={() => ({
                 headerShown: false,
-                headerTitleAlign: 'center'
             })}
         />
         <AppStacks.Screen
@@ -105,9 +86,8 @@ const AppStackScreen = () => (
             // Options: we have route & navigation params available
             options={() => ({
                 headerTitle: `Deck Details`,
-                headerTitleAlign: "center",
                 // I can overwrite the headerStyle set in Navigator
-                headerStyle: { backgroundColor: blue }
+                // headerStyle: { backgroundColor: blue }
             })}
         />
         <AppStacks.Screen
@@ -115,17 +95,14 @@ const AppStackScreen = () => (
             component={AddCard}
             options={() => ({
                 headerTitle: `Add Card`,
-                headerTitleAlign: "center",
-                headerStyle: { backgroundColor: blue }
             })}
         />
         <AppStacks.Screen
             name='Quiz'
             component={Quiz}
-            options={() => ({
-                headerTitle: `Quiz`,
-                headerTitleAlign: "center",
-                headerStyle: { backgroundColor: blue }
+            options={({ route }) => ({
+                // to display a dynamic title
+                headerTitle: `${route.params.title} Quiz`,
             })}
         />
     </AppStacks.Navigator>

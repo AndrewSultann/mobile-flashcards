@@ -66,6 +66,8 @@ like {decks && Object.values()} and  if(!deck){return < no deck >}
 
 2) onPress={() => this.deleteDeckFunc(title)}
 
+
+3) The tabBarIcon function receives { focused: boolean, color: string, size: number } object. Here correcting the argument name from tintColor to color in both places should fix the issue.
 --
 => Filter for Objects:
 Object.filter = (obj, predicate) => 
@@ -97,3 +99,7 @@ IF its a class => title: this.props.route.params.user.name,
 
 - A Library for navigation
 https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/
+
+
+- To have titles for your tabs
+https://reactnavigation.org/docs/screen-options-resolution/#setting-parent-screen-options-based-on-child-navigators-state

@@ -15,7 +15,6 @@ class AddDeck extends React.Component {
     handleSubmit = () => {
         const { dispatch } = this.props
         const { title } = this.state
-        console.log(title)
         dispatch(addDeck(title))
         this.setState({ title: '' })
         this.props.navigation.navigate('DeckList')

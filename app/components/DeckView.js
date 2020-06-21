@@ -8,7 +8,6 @@ import { deleteDeck } from '../actions'
 class DeckView extends React.Component {
     deleteDeckFunc = (title) => {
         const { dispatch } = this.props
-        console.log('title', title)
         dispatch(deleteDeck(title))
         this.props.navigation.navigate('DeckList')
     }
@@ -28,7 +27,10 @@ class DeckView extends React.Component {
                     >
                         <Text style={[styles.itemText, { color: '#000' }]}>Add Card</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.item]}>
+                    <TouchableOpacity
+                        style={[styles.item]}
+                        onPress={() => this.props.navigation.navigate('Quiz', { title })}
+                    >
                         <Text style={styles.itemText}>Start a Quiz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity

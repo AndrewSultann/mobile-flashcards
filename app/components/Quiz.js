@@ -11,15 +11,17 @@ class Quiz extends React.Component {
         correctAnswers: 0,
     }
     nextQuestion = (isCorrect) => {
+        const { questionsCounter } = this.state
         if (isCorrect) {
             this.setState((currentState) => ({
                 correctAnswers: currentState.correctAnswers + 1
             }))
-            console.log(this.state.correctAnswers)
+            console.log(this.state.correctAnswers, this.state.questionsCounter)
         }
         this.setState((currentState) => ({
-            questionsCounter: currentState.questionsCounter + 1
+            questionsCounter: questionsCounter < questionsCounter.length ? currentState.questionsCounter + 1 : null
         }))
+        console.log('new counter', this.state.questionsCounter)
     }
     render() {
         const { questions } = this.props.deck

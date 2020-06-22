@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { connect } from 'react-redux'
 import { blue, gray, white } from '../utils/colors'
-import { ceil } from 'react-native-reanimated'
 
 class Quiz extends React.Component {
     state = {
@@ -10,29 +9,30 @@ class Quiz extends React.Component {
         questionsCounter: 0,
         correctAnswers: 0,
     }
+
     nextQuestion = (isCorrect) => {
-        const { questionsCounter } = this.state
         if (isCorrect) {
             this.setState((currentState) => ({
                 correctAnswers: currentState.correctAnswers + 1
             }))
-            console.log(this.state.correctAnswers, this.state.questionsCounter)
         }
         this.setState((currentState) => ({
-            questionsCounter: questionsCounter < questionsCounter.length ? currentState.questionsCounter + 1 : null
+            questionsCounter: currentState.questionsCounter + 1
         }))
-        console.log('new counter', this.state.questionsCounter)
+    }
+    repeatQuiz = () => {
+        this.setState({ questionsCounter: 0, correctAnswers: 0 })
+        this.props.navigation.navigate('Quiz')
     }
     render() {
         const { questions } = this.props.deck
-        const { showAnswer, questionsCounter } = this.state
+        const { showAnswer, questionsCounter, correctAnswers } = this.state
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>Test yourself by recalling the answers</Text>
-
-                {questions || questionsCounter
+                {questions && questionsCounter < questions.length
                     ? (
-                        <View>
+                        <View style={{ flex: 1, alignItems: "center" }}>
+                            <Text style={styles.title}>Test yourself by recalling the answers</Text>
                             {!showAnswer
                                 ? <View style={styles.card}>
                                     <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 35 }}>Question #{questionsCounter + 1}</Text>
@@ -47,7 +47,7 @@ class Quiz extends React.Component {
 
                             <View style={{ flex: 1, alignItems: "center", marginTop: 80 }}>
                                 <TouchableOpacity
-                                    style={styles.showAnswerBtn}
+                                    style={styles.btn}
                                     onPress={() => this.setState({ showAnswer: !showAnswer })}
                                 // disabled={showAnswer}
                                 >
@@ -71,34 +71,63 @@ class Quiz extends React.Component {
                         </View>
                     )
                     : (
-                        <View></View>
+                        <View style={styles.container}>
+                            <Text style={[styles.title, { fontWeight: "bold" }]}>Your Score</Text>
+                            <View style={styles.scoreCard}>
+                                <Text style={[styles.scoreCardTxt,]}>{correctAnswers}</Text>
+                            </View>
+                            <Text style={styles.scoreText}>
+                                You have answered <Text>{correctAnswers} </Text>
+                                questions out of <Text>{questions.length}</Text> correctly
+                            </Text>
+                            <View style={{ flexDirection: "row", marginTop: 100 }}>
+                                <TouchableOpacity
+                                    style={[styles.scoreBtn, { marginRight: 15, backgroundColor: gray }]}
+                                    onPress={() => this.props.navigation.navigate("DeckList")}
+
+                                >
+                                    <Text style={[styles.btnText, { fontSize: 18 }]}>Home Page</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.scoreBtn]}
+                                    onPress={this.repeatQuiz}
+                                >
+                                    <Text style={[styles.btnText, { fontSize: 18 }]}>Repeat Quiz</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     )
                 }
             </View>
         )
     }
 }
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
+        paddingRight: 15,
+        paddingLeft: 15,
     },
     title: {
-        paddingTop: 20,
+        marginTop: 25,
+        marginBottom: 60,
         fontSize: 22,
         color: 'rgba(0, 0, 0, 0.7)',
-        marginBottom: 60
+        textAlign: 'center'
     },
     card: {
         backgroundColor: white,
         width: 400,
-        maxWidth: 400,
+        maxWidth: 350,
         height: 200,
         padding: 15,
         paddingRight: 30,
         paddingLeft: 30,
     },
-    showAnswerBtn: {
+    btn: {
         backgroundColor: blue,
         width: 200,
         borderRadius: 3,
@@ -121,6 +150,33 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 22,
 
+    },
+    scoreCard: {
+        backgroundColor: blue,
+        width: 100,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderRadius: 3,
+        marginBottom: 60,
+
+    },
+    scoreCardTxt: {
+        color: white,
+        textAlign: 'center',
+        fontSize: 22,
+        fontWeight: "bold"
+    },
+    scoreText: {
+        fontSize: 20,
+        textAlign: "center"
+    },
+    scoreBtn: {
+        backgroundColor: blue,
+        width: 150,
+        borderRadius: 3,
+        padding: 15,
+        paddingLeft: 20,
+        paddingRight: 20,
     }
 
 })

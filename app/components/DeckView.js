@@ -50,7 +50,9 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 60,
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
+        paddingRight: 15,
+        paddingLeft: 15
     },
     item: {
         backgroundColor: blue,

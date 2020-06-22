@@ -59,6 +59,11 @@ Decks(titles and cards)
 => Notes:
 I need middleware if I am using redux
 
+styles: {
+    marginHorizontal: 
+    marginVertical: 
+}
+
 =>Common problems
 1)when handleInitialData doesn't work you need to check that you have put a conditon
 like {decks && Object.values()} and  if(!deck){return < no deck >}
@@ -103,3 +108,10 @@ https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-
 
 - To have titles for your tabs
 https://reactnavigation.org/docs/screen-options-resolution/#setting-parent-screen-options-based-on-child-navigators-state
+
+
+=> Notifications
+https://docs.expo.io/versions/latest/sdk/notifications/
+
+=> Animation
+https://blog.pusher.com/animation-react-native-part-1/

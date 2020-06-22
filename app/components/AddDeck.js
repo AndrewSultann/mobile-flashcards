@@ -51,14 +51,18 @@ class AddDeck extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingRight: 15,
+        paddingLeft: 15
     },
     title: {
         fontSize: 27,
         color: blue,
         marginBottom: 40,
         marginTop: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: "center"
+
     },
     TextInput: {
         width: 300,

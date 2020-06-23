@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { gray, blue, white } from '../utils/colors'
 import { addCard } from '../actions/index'
@@ -10,6 +10,16 @@ class AddCard extends React.Component {
         question: '',
         answer: ''
     }
+    createAlert = () =>
+        Alert.alert(
+            "Error",
+            "Text inputs are empty!",
+            [
+                { text: "OK" }
+            ],
+            { cancelable: false }
+        );
+
     handleQuestionChange = (question) => {
         this.setState({ question })
     }
@@ -24,8 +34,14 @@ class AddCard extends React.Component {
             question: this.state.question,
             answer: this.state.answer
         }
-        dispatch(addCard(title, card))
-        this.props.navigation.navigate('DeckList')
+
+        if (this.state.question === '' || this.state.answer === '') {
+            this.createAlert()
+        } else {
+            dispatch(addCard(title, card))
+            this.props.navigation.navigate('DeckList')
+        }
+
     }
     isDisabled = () => {
         return this.state.question === '' || this.state.answer === ''
@@ -53,7 +69,7 @@ class AddCard extends React.Component {
                 <TouchableOpacity
                     style={styles.submitBtn}
                     onPress={(e) => this.handleSubmit(e)}
-                    disabled={this.isDisabled()}
+                // disabled={this.isDisabled()}
                 >
                     <Text style={styles.submitBtnText}>
                         Submit

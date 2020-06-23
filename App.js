@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import { createStore } from 'redux'
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
 import reducer from './app/reducers'
 import middleware from './app/middleware'
 
-import DeckList from './app/components/DeckList'
-import DeckView from './app/components/DeckView'
-import AddCard from './app/components/AddCard'
 import { blue } from './app/utils/colors';
 import Navigation from './app/config/navigation'
 
-
+import { setLocalNotification } from './app/utils/helpers'
 
 
 function AppStatusBar({ backgroundColor, ...props }) {
@@ -24,6 +21,10 @@ function AppStatusBar({ backgroundColor, ...props }) {
 }
 
 class App extends Component {
+  componentDidMount() {
+    // Notifications
+    setLocalNotification()
+  }
 
   render() {
     const store = createStore(reducer, middleware)

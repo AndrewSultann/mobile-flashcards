@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native'
 import { connect } from 'react-redux'
 import { blue, gray, white } from '../utils/colors'
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 class Quiz extends React.Component {
     state = {
@@ -17,11 +18,16 @@ class Quiz extends React.Component {
             }))
         }
         this.setState((currentState) => ({
-            questionsCounter: currentState.questionsCounter + 1
+            questionsCounter: currentState.questionsCounter + 1,
+            showAnswer: false
         }))
+
+        // Notifications
+        clearLocalNotification()
+            .then(setLocalNotification)
     }
     repeatQuiz = () => {
-        this.setState({ questionsCounter: 0, correctAnswers: 0 })
+        this.setState({ questionsCounter: 0, correctAnswers: 0, showAnswer: false })
         this.props.navigation.navigate('Quiz')
     }
     render() {
@@ -29,73 +35,87 @@ class Quiz extends React.Component {
         const { showAnswer, questionsCounter, correctAnswers } = this.state
         return (
             <View style={styles.container}>
-                {questions && questionsCounter < questions.length
+                {questions && questions.length > 0//If questions exist
                     ? (
-                        <View style={{ flex: 1, alignItems: "center" }}>
-                            <Text style={styles.title}>Test yourself by recalling the answers</Text>
-                            {!showAnswer
-                                ? <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 35 }}>Question #{questionsCounter + 1}</Text>
-                                    <Text style={{ fontSize: 24, textAlign: "center" }} > {questions[questionsCounter].question}</Text>
-                                </View>
+                        questionsCounter < questions.length  // if questions are not finished
+                            ? (
+                                <View style={{ flex: 1, alignItems: "center" }}>
+                                    <Text style={styles.title}>Test yourself by recalling the answers</Text>
+                                    {!showAnswer
+                                        ? <View style={styles.card}>
+                                            <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 35 }}>Question #{questionsCounter + 1}</Text>
+                                            <Text style={{ fontSize: 24, textAlign: "center" }} > {questions[questionsCounter].question}</Text>
+                                        </View>
 
-                                : <View style={styles.card}>
-                                    <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 35 }}>Answer</Text>
-                                    <Text style={{ fontSize: 24, textAlign: "center" }} > {questions[questionsCounter].answer}</Text>
+                                        : <View style={styles.card}>
+                                            <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 35 }}>Answer</Text>
+                                            <Text style={{ fontSize: 24, textAlign: "center" }} > {questions[questionsCounter].answer}</Text>
+                                        </View>
+                                    }
+                                    <View style={{ flex: 1, alignItems: "center", marginTop: 80 }}>
+                                        <TouchableOpacity
+                                            style={styles.btn}
+                                            onPress={() => this.setState({ showAnswer: !showAnswer })}
+                                        >
+                                            <Text style={styles.btnText}>{showAnswer ? 'Show Question' : 'Show Answer'}</Text>
+                                        </TouchableOpacity>
+                                        <View style={{ flexDirection: "row" }}>
+                                            <TouchableOpacity
+                                                style={[styles.rateBtn, { backgroundColor: 'red', marginRight: 15 }]}
+                                                onPress={() => this.nextQuestion(false)}
+                                            >
+                                                <Text style={[styles.btnText, { fontSize: 16 }]}>Wrong Answer</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={styles.rateBtn}
+                                                onPress={() => this.nextQuestion(true)}
+                                            >
+                                                <Text style={[styles.btnText, { fontSize: 16 }]}>Correct Answer</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
-                            }
+                            )
 
-                            <View style={{ flex: 1, alignItems: "center", marginTop: 80 }}>
-                                <TouchableOpacity
-                                    style={styles.btn}
-                                    onPress={() => this.setState({ showAnswer: !showAnswer })}
-                                // disabled={showAnswer}
-                                >
-                                    <Text style={styles.btnText}>{showAnswer ? 'Show Question' : 'Show Answer'}</Text>
-                                </TouchableOpacity>
-                                <View style={{ flexDirection: "row" }}>
-                                    <TouchableOpacity
-                                        style={[styles.rateBtn, { backgroundColor: 'red', marginRight: 15 }]}
-                                        onPress={() => this.nextQuestion(false)}
-                                    >
-                                        <Text style={[styles.btnText, { fontSize: 16 }]}>Wrong Answer</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={styles.rateBtn}
-                                        onPress={() => this.nextQuestion(true)}
-                                    >
-                                        <Text style={[styles.btnText, { fontSize: 16 }]}>Correct Answer</Text>
-                                    </TouchableOpacity>
+                            : ( // if questions are finished
+                                <View style={styles.container}>
+                                    <Text style={[styles.title, { fontWeight: "bold" }]}>Your Score</Text>
+                                    <View style={styles.scoreCard}>
+                                        <Text style={[styles.scoreCardTxt,]}>{correctAnswers}</Text>
+                                    </View>
+                                    <Text style={styles.scoreText}>
+                                        You have answered <Text>{correctAnswers} </Text>
+                                    questions out of <Text>{questions.length}</Text> correctly
+                                </Text>
+                                    <View style={{ flexDirection: "row", marginTop: 100 }}>
+                                        <TouchableOpacity
+                                            style={[styles.scoreBtn, { marginRight: 15, backgroundColor: gray }]}
+                                            onPress={() => this.props.navigation.navigate('DeckView')}
+
+                                        >
+                                            <Text style={[styles.btnText, { fontSize: 18 }]}>Go Back</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={[styles.scoreBtn]}
+                                            onPress={this.repeatQuiz}
+                                        >
+                                            <Text style={[styles.btnText, { fontSize: 18 }]}>Repeat Quiz</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            </View>
-                        </View>
+                            )
                     )
-                    : (
-                        <View style={styles.container}>
-                            <Text style={[styles.title, { fontWeight: "bold" }]}>Your Score</Text>
-                            <View style={styles.scoreCard}>
-                                <Text style={[styles.scoreCardTxt,]}>{correctAnswers}</Text>
-                            </View>
-                            <Text style={styles.scoreText}>
-                                You have answered <Text>{correctAnswers} </Text>
-                                questions out of <Text>{questions.length}</Text> correctly
-                            </Text>
-                            <View style={{ flexDirection: "row", marginTop: 100 }}>
-                                <TouchableOpacity
-                                    style={[styles.scoreBtn, { marginRight: 15, backgroundColor: gray }]}
-                                    onPress={() => this.props.navigation.navigate("DeckList")}
-
-                                >
-                                    <Text style={[styles.btnText, { fontSize: 18 }]}>Home Page</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[styles.scoreBtn]}
-                                    onPress={this.repeatQuiz}
-                                >
-                                    <Text style={[styles.btnText, { fontSize: 18 }]}>Repeat Quiz</Text>
-                                </TouchableOpacity>
-                            </View>
+                    : ( // if questions don't exist
+                        <View>
+                            <Text style={styles.title}>No Cards In This Deck</Text>
+                            <TouchableOpacity
+                                style={styles.btn}
+                                onPress={() => this.props.navigation.navigate('DeckView')}
+                            >
+                                <Text style={styles.btnText}>Add Cards</Text>
+                            </TouchableOpacity>
                         </View>
+
                     )
                 }
             </View>
@@ -122,7 +142,8 @@ const styles = StyleSheet.create({
         backgroundColor: white,
         width: 400,
         maxWidth: 350,
-        height: 200,
+        height: 250,
+        maxHeight: 400,
         padding: 15,
         paddingRight: 30,
         paddingLeft: 30,

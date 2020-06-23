@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { blue, white, gray } from '../utils/colors'
 import { TextInput } from 'react-native-gesture-handler'
 import { connect } from 'react-redux'
@@ -9,15 +9,32 @@ class AddDeck extends React.Component {
     state = {
         title: ''
     }
+
+    createAlert = () =>
+        Alert.alert(
+            "Error",
+            "Text inputs are empty!",
+            [
+                { text: "OK" },
+            ],
+
+            { cancelable: false }
+        );
+
     handleTextChange = (title) => {
         this.setState({ title })
     }
     handleSubmit = () => {
         const { dispatch } = this.props
         const { title } = this.state
-        dispatch(addDeck(title))
-        this.setState({ title: '' })
-        this.props.navigation.navigate('DeckList')
+        if (this.state.title === '') {
+            this.createAlert()
+        } else {
+            dispatch(addDeck(title))
+            this.setState({ title: '' })
+            this.props.navigation.navigate('DeckView', { title })
+        }
+
 
     }
     isDisabled = () => {
@@ -37,7 +54,7 @@ class AddDeck extends React.Component {
                 <TouchableOpacity
                     style={styles.submitBtn}
                     onPress={this.handleSubmit}
-                    disabled={this.isDisabled()}
+                // disabled={this.isDisabled()}
                 >
                     <Text style={styles.submitBtnText}>
                         Submit
@@ -82,6 +99,9 @@ const styles = StyleSheet.create({
     },
     submitBtnText: {
         color: white,
+    },
+    cancel: {
+        color: blue
     }
 
 })
